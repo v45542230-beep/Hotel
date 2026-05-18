@@ -1,0 +1,32 @@
+﻿@model IEnumerable<Hotel.Models.Post>
+@{
+    ViewData["Title"] = "Должности";
+}
+<h2>Должности</h2>
+<form asp-controller="Home" asp-action="Post" method="Post" id="search" class="d-inline">
+    <input type="text" name="column" />
+    <input type="submit" value="Найти" class="btn btn-success w-30 p-1" />
+</form>
+<form asp-controller="Home" asp-action="InsertPost" method="Get" class="d-inline">
+    <input type="submit" value="Добавить" class="btn btn-success w-30 p-1" />
+</form>
+<div id="testTableContainer">@Html.Partial("_Post", Model)</div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $('#search').submit(function (e) {
+            e.preventDefault();
+            $.ajax({
+                url: '@Url.Action("Post", "Home")',
+                type: 'POST',
+                data: $(this).serialize(),
+                success: function (data) {
+                    $('#testTableContainer').html(data);
+                },
+                error: function (xhr, status, error) {
+                    console.error(error);
+                }
+            });
+        });
+    });
+</script>

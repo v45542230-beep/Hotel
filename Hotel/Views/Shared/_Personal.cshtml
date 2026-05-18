@@ -1,0 +1,26 @@
+﻿@model IEnumerable<Hotel.Models.Personal>
+<table class="table">
+    <tr>
+        <th>ФИО</th>
+        <th>Должность</th>
+        <th>Дата найма</th>
+        <th>Зарплата</th>
+    </tr>
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                <label asp-for="@item.Fio">@item.Fio</label>
+            </td>
+            <td>
+                <label asp-for="@item.Name">@item.Name</label>
+            </td>
+            <td>
+                <label asp-for="@item.Date_of_employment">@item.Date_of_employment</label>
+            </td>
+            <td>
+                <label asp-for="@item.Pay">@item.Pay</label>
+            </td>
+        </tr>
+    }
+</table>

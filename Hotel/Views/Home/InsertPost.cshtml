@@ -1,0 +1,21 @@
+﻿@model Hotel.Models.Post
+@{
+    ViewData["Title"] = "Добавить должность";
+}
+<div class="account-container">
+    <div class="account-box">
+        <form asp-action="InsertPost" asp-controller="Home" method="Post">
+            <div class="mb-3">
+                <label asp-for="Name" class="form-label">Должность</label>
+                <input type="text" maxlength="20" asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="Pay" class="form-label">Зарплата</label>
+                <input type="number" asp-for="Pay" class="form-control" />
+                <span asp-validation-for="Pay" class="text-danger"></span>
+            </div>
+            <input type="submit" value="Добавить" class="btn btn-success w-100 p-2" />
+        </form>
+    </div>
+</div>

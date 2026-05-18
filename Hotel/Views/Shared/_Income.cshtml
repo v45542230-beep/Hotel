@@ -1,0 +1,18 @@
+﻿@model IEnumerable<Hotel.Models.Income>
+<table class="table">
+    <tr>
+        <th>Сумма</th>
+        <th>Доход</th>
+    </tr>
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                <label asp-for="@item.Final_price">@item.Final_price</label>
+            </td>
+            <td>
+                <label asp-for="@item.Begin_date">@item.Begin_date</label>
+            </td>
+        </tr>
+    }
+</table>

@@ -1,0 +1,36 @@
+﻿@model Hotel.Models.Service
+@{
+    ViewData["Title"] = "Добавить услугу";
+}
+<div class="account-container">
+    <div class="account-box">
+        <form asp-action="InsertService" asp-controller="Home" method="Post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="mb-3">
+                <label asp-for="Name" class="form-label">Название</label>
+                <select asp-for="Name" class="form-control">
+                    <option value="Доставка еды">Доставка еды</option>
+                    <option value="Спортзал">Спортзал</option>
+                    <option value="Парковка">Парковка</option>
+                </select>
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="Id_st" class="form-label">Id сотрудника</label>
+                <input type="number" asp-for="Id_st" class="form-control" />
+                <span asp-validation-for="Id_st" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="Id_c" class="form-label">Id клиента</label>
+                <input type="number" asp-for="Id_c" class="form-control" />
+                <span asp-validation-for="Id_c" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="Date_of_registration" class="form-label">Дата регистрации</label>
+                <input type="datetime-local" asp-for="Date_of_registration" class="form-control" />
+                <span asp-validation-for="Date_of_registration" class="text-danger"></span>
+            </div>
+            <input type="submit" value="Добавить" class="btn btn-success w-100 p-2" />
+        </form>
+    </div>
+</div>

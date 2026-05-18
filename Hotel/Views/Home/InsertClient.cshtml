@@ -1,0 +1,56 @@
+﻿@model Hotel.Models.Clients
+@{
+    ViewData["Title"] = "Добавить клиента";
+}
+<div class="account-container">
+    <div class="account-box">
+        <form asp-action="InsertClient" asp-controller="Home" method="Post">
+            <div class="mb-3">
+                <label asp-for="Fio" class="form-label">ФИО</label>
+                <input type="text" maxlength="100" asp-for="Fio" class="form-control" />
+                <span asp-validation-for="Fio" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="Birth" class="form-label">Дата рождения</label>
+                <input type="datetime-local" asp-for="Birth" class="form-control" />
+                <span asp-validation-for="Birth" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="Series" class="form-label">Серия</label>
+                <input type="text" maxlength="4" placeholder="0000" asp-for="Series" class="form-control" />
+                <span asp-validation-for="Series" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="Number" class="form-label">Номер</label>
+                <input type="text" maxlength="6" placeholder="000000" asp-for="Number" class="form-control" />
+                <span asp-validation-for="Number" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="Date_of_issue" class="form-label">Дата выдачи</label>
+                <input type="datetime-local" asp-for="Date_of_issue" class="form-control" />
+                <span asp-validation-for="Date_of_issue" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="Issued_by_whom" class="form-label">Кем выдан</label>
+                <input type="text" maxlength="50" asp-for="Issued_by_whom" class="form-control" />
+                <span asp-validation-for="Issued_by_whom" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="Card" class="form-label">Карта</label>
+                <input type="text" maxlength="19" placeholder="0000-0000-0000-0000" asp-for="Card" class="form-control" />
+                <span asp-validation-for="Card" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="Phone" class="form-label">Телефон</label>
+                <input type="text" maxlength="16" placeholder="+7(000)000-00-00" asp-for="Phone" class="form-control" />
+                <span asp-validation-for="Phone" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="Email" class="form-label">Email</label>
+                <input type="text" maxlength="50" placeholder="example@mail.ru" asp-for="Email" class="form-control" />
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+            <input type="submit" value="Добавить" class="btn btn-success w-100 p-2" />
+        </form>
+    </div>
+</div>

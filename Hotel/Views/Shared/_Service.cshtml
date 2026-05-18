@@ -1,0 +1,42 @@
+﻿@model IEnumerable<Hotel.Models.Service>
+<table class="table">
+    <tr>
+        <th>ID</th>
+        <th>Услуга</th>
+        <th>ID сотрудника</th>
+        <th>Номер</th>
+        <th>Дата регистрации</th>
+        <th>Обновление</th>
+        <th>Удаление</th>
+    </tr>
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                <label asp-for="@item.Id">@item.Id</label>
+            </td>
+            <td>
+                <label asp-for="@item.Name">@item.Name</label>
+            </td>
+            <td>
+                <label asp-for="@item.Id_st">@item.Id_st</label>
+            </td>
+            <td>
+                <label asp-for="@item.Id_c">@item.Id_c</label>
+            </td>
+            <td>
+                <label asp-for="@item.Date_of_registration">@item.Date_of_registration</label>
+            </td>
+            <td>
+                <form asp-controller="Home" asp-action="UpdateService" method="get" asp-route-id="@item.Id">
+                    <input type="submit" value="Обновить" class="btn btn-success w-30 p-1" />
+                </form>
+            </td>
+            <td>
+                <form asp-controller="Home" asp-action="DeleteService" method="post" asp-route-id="@item.Id">
+                    <input type="submit" value="Удалить" class="btn btn-success w-30 p-1" />
+                </form>
+            </td>
+        </tr>
+    }
+</table>

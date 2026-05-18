@@ -1,0 +1,37 @@
+﻿@model Hotel.Models.Booking
+@{
+    ViewData["Title"] = "Добавить бронирование";
+}
+<div class="account-container">
+    <div class="account-box">
+        <form asp-action="InsertBooking" asp-controller="Home" method="Post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="mb-3">
+                <label asp-for="Id_c" class="form-label">Id клиента</label>
+                <input type="number" asp-for="Id_c" class="form-control" />
+                <span asp-validation-for="Id_c" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="Id_r" class="form-label">Номер</label>
+                <input type="number" asp-for="Id_r" class="form-control" />
+                <span asp-validation-for="Id_r" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="Begin_date" class="form-label">Дата въезда</label>
+                <input type="datetime-local" asp-for="Begin_date" class="form-control" />
+                <span asp-validation-for="Begin_date" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="End_date" class="form-label">Дата выезда</label>
+                <input type="datetime-local" asp-for="End_date" class="form-control" />
+                <span asp-validation-for="End_date" class="text-danger"></span>
+            </div>
+            <div class="mb-3">
+                <label asp-for="Count_c" class="form-label">Количество гостей</label>
+                <input type="number" asp-for="Count_c" class="form-control" />
+                <span asp-validation-for="Count_c" class="text-danger"></span>
+            </div>
+            <input type="submit" value="Добавить" class="btn btn-success w-100 p-2" />
+        </form>
+    </div>
+</div>

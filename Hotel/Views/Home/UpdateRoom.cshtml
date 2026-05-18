@@ -1,0 +1,42 @@
+﻿@model Hotel.Models.Rooms
+@{
+    ViewData["Title"] = "Обновить номер";
+}
+<div class="account-container">
+    <div class="account-box">
+        <form asp-action="UpdateRoom" asp-controller="Home" method="Post">
+            <div class="mb-3">
+                <label asp-for="Type" class="form-label">Тип</label>
+                <select asp-for="Type" class="form-control">
+                    <option value="Обычный">Обычный</option>
+                    <option value="VIP">VIP</option>
+                </select>
+            </div>
+            <div class="mb-3">
+                <label asp-for="Count" class="form-label">Количество гостей</label>
+                <select asp-for="Count" class="form-control">
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                </select>
+            </div>
+            <div class="mb-3">
+                <label asp-for="Status" class="form-label">Статус</label>
+                <select asp-for="Status" class="form-control">
+                    <option value="Свободен">Свободен</option>
+                    <option value="Занят">Занят</option>
+                </select>
+            </div>
+            <div class="mb-3">
+                <label asp-for="Floor" class="form-label">Этаж</label>
+                <select asp-for="Floor" class="form-control">
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                </select>
+            </div>
+            <input type="submit" value="Обновить" class="btn btn-success w-100 p-2" />
+        </form>
+    </div>
+</div>

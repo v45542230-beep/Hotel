@@ -1,0 +1,41 @@
+﻿@model IEnumerable<Hotel.Models.Clients>
+@{
+    ViewData["Title"] = "Клиенты";
+}
+<h2>Клиенты</h2>
+<form asp-controller="Home" asp-action="Clients" method="Post" id="search" class="d-inline">
+    <input type="text" name="column" />
+    <select name="field" class="filter">
+        <option value="fio">ФИО</option>
+        <option value="birth">дата рождения</option>
+        <option value="series">серия</option>
+        <option value="number">номер</option>
+        <option value="issued_by_whom">кем выдан</option>
+        <option value="phone">телефон</option>
+        <option value="email">email</option>
+    </select>
+    <input type="submit" value="Найти" class="btn btn-success w-30 p-1" />
+</form>
+<form asp-controller="Home" asp-action="InsertClient" method="Get" class="d-inline">
+    <input type="submit" value="Добавить" class="btn btn-success w-30 p-1" />
+</form>
+<div id="testTableContainer">@Html.Partial("_Clients", Model)</div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $('#search').submit(function (e) {
+            e.preventDefault();
+            $.ajax({
+                url: '@Url.Action("Clients", "Home")',
+                type: 'POST',
+                data: $(this).serialize(),
+                success: function (data) {
+                    $('#testTableContainer').html(data);
+                },
+                error: function (xhr, status, error) {
+                    console.error(error);
+                }
+            });
+        });
+    });
+</script>

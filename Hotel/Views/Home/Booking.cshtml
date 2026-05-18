@@ -1,0 +1,39 @@
+﻿@model IEnumerable<Hotel.Models.Booking>
+@{
+    ViewData["Title"] = "Бронирование";
+}
+<h2>Бронирование</h2>
+<form asp-controller="Home" asp-action="Booking" method="Post" id="search" class="d-inline">
+    <input type="text" name="column" />
+    <select name="field" class="filter">
+        <option value="id_c">id клиента</option>
+        <option value="id_r">номер</option>
+        <option value="begin_date">дата въезда</option>
+        <option value="end_date">дата выезда</option>
+        <option value="count_c">количество гостей</option>
+    </select>
+    <input type="submit" value="Найти" class="btn btn-success w-30 p-1" />
+</form>
+<form asp-controller="Home" asp-action="InsertBooking" method="Get" class="d-inline">
+    <input type="submit" value="Добавить" class="btn btn-success w-30 p-1" />
+</form>
+<div id="testTableContainer">@Html.Partial("_Booking", Model)</div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $('#search').submit(function (e) {
+            e.preventDefault();
+            $.ajax({
+                url: '@Url.Action("Booking", "Home")',
+                type: 'POST',
+                data: $(this).serialize(),
+                success: function (data) {
+                    $('#testTableContainer').html(data);
+                },
+                error: function (xhr, status, error) {
+                    console.error(error);
+                }
+            });
+        });
+    });
+</script>

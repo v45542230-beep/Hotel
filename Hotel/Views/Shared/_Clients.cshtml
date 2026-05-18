@@ -1,0 +1,62 @@
+﻿@model IEnumerable<Hotel.Models.Clients>
+<table class="table">
+    <tr>
+        <th>ID</th>
+        <th>ФИО</th>
+        <th>Дата рождения</th>
+        <th>Серия</th>
+        <th>Номер</th>
+        <th>Дата выдачи</th>
+        <th>Кем выдан</th>
+        <th>Карта</th>
+        <th>Телефон</th>
+        <th>Email</th>
+        <th>Обновление</th>
+        <th>Удаление</th>
+    </tr>
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                <label asp-for="@item.Id">@item.Id</label>
+            </td>
+            <td>
+                <label asp-for="@item.Fio">@item.Fio</label>
+            </td>
+            <td>
+                <label asp-for="@item.Birth">@item.Birth</label>
+            </td>
+            <td>
+                <label asp-for="@item.Series">@item.Series</label>
+            </td>
+            <td>
+                <label asp-for="@item.Number">@item.Number</label>
+            </td>
+            <td>
+                <label asp-for="@item.Date_of_issue">@item.Date_of_issue</label>
+            </td>
+            <td>
+                <label asp-for="@item.Issued_by_whom">@item.Issued_by_whom</label>
+            </td>
+            <td>
+                <label asp-for="@item.Card">@item.Card</label>
+            </td>
+            <td>
+                <label asp-for="@item.Phone">@item.Phone</label>
+            </td>
+            <td>
+                <label asp-for="@item.Email">@item.Email</label>
+            </td>
+            <td>
+                <form asp-controller="Home" asp-action="UpdateClient" method="get" asp-route-id="@item.Id">
+                    <input type="submit" value="Обновить" class="btn btn-success w-30 p-1" />
+                </form>
+            </td>
+            <td>
+                <form asp-controller="Home" asp-action="DeleteClient" method="post" asp-route-id="@item.Id">
+                    <input type="submit" value="Удалить" class="btn btn-success w-30 p-1" />
+                </form>
+            </td>
+        </tr>
+    }
+</table>
