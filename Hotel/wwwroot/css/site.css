@@ -33,3 +33,20 @@ body {
 .filter{
     padding: 0.2%;
 }
+
+#room-container {
+    display: grid;
+    border: 10px solid grey;
+    border-radius: 30px;
+    margin: 20px;
+    text-align: center;
+    padding: 10px;
+}
+
+#list-container {
+    display: grid;
+    grid-template-columns: 300px 300px 300px 300px;
+    position: absolute;
+    left: 19%;
+    right: 19%;
+}

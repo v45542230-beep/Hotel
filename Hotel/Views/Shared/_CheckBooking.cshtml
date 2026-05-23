@@ -1,0 +1,22 @@
+﻿@model IEnumerable<Hotel.Models.Booking>
+<table class="table">
+    <tr>
+        <th>Номер</th>
+        <th>Дата въезда</th>
+        <th>Дата выезда</th>
+    </tr>
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                <label asp-for="@item.Id_r">@item.Id_r</label>
+            </td>
+            <td>
+                <label asp-for="@item.Begin_date">@item.Begin_date</label>
+            </td>
+            <td>
+                <label asp-for="@item.End_date">@item.End_date</label>
+            </td>
+        </tr>
+    }
+</table>

@@ -26,7 +26,66 @@ namespace Hotel.Controllers
 
         public IActionResult Index()
         {
-            return View();
+            HotelContext context = HttpContext.RequestServices.GetService(typeof(HotelContext)) as HotelContext;
+            return View(context.GetRooms());
+        }
+
+        [HttpGet]
+        public IActionResult CheckClient(CheckClient client, int id)
+        {
+            client.Id_r = id;
+            return View(client);
+        }
+
+        [HttpPost]
+        public IActionResult CheckClient(Booking booking, CheckClient checkClient)
+        {
+            HotelContext context = HttpContext.RequestServices.GetService(typeof(HotelContext)) as HotelContext;
+            Clients client = context.GetOneClientByFioAndPhone(checkClient.Fio, checkClient.Phone);
+            if (ModelState.IsValid)
+            {
+                if (client.Id > 0)
+                {
+                    booking.Id_r = checkClient.Id_r;
+                    booking.Id_c = client.Id;
+                    return View("InsertBooking", booking);
+                }
+                else
+                {
+                    return View("InsertClient");
+                }
+            }
+            else
+            {
+                return View();
+            }
+        }
+
+        [HttpGet]
+        public IActionResult CheckBooking()
+        {
+            HotelContext context = HttpContext.RequestServices.GetService(typeof(HotelContext)) as HotelContext;
+            return View(context.GetBooking());
+        }
+
+        [HttpPost]
+        public IActionResult CheckBooking(string field, string column)
+        {
+            HotelContext context = HttpContext.RequestServices.GetService(typeof(HotelContext)) as HotelContext;
+            IEnumerable<Booking> booking = context.GetBooking();
+            if (field == "id_r" && column != null)
+            {
+                booking = context.GetBooking().Where(t => t.Id_r.ToString().Contains(column));
+            }
+            else if (field == "begin_date" && column != null)
+            {
+                booking = context.GetBooking().Where(t => t.Begin_date.ToString().Contains(column));
+            }
+            else if (field == "end_date" && column != null)
+            {
+                booking = context.GetBooking().Where(t => t.End_date.ToString().Contains(column));
+            }
+            return PartialView("_CheckBooking", booking);
         }
 
         [Authorize(Roles = "Admin")]
@@ -359,14 +418,12 @@ namespace Hotel.Controllers
             return PartialView("_Personal", personal);
         }
 
-        [Authorize]
         [HttpGet]
         public IActionResult InsertClient()
         {
             return View();
         }
 
-        [Authorize]
         [HttpPost]
         public async Task<IActionResult> InsertClient(Clients model)
         {
@@ -374,7 +431,14 @@ namespace Hotel.Controllers
             if (ModelState.IsValid)
             {
                 context.InsertClients(model);
-                return RedirectToAction("Clients");
+                if (User.IsInRole("User") || User.IsInRole("Admin"))
+                {
+                    return RedirectToAction("Clients");
+                }
+                else
+                {
+                    return RedirectToAction("Index");
+                }
             }
             else
             {
@@ -483,14 +547,12 @@ namespace Hotel.Controllers
             }
         }
 
-        [Authorize]
         [HttpGet]
         public IActionResult InsertBooking()
         {
-            return View();
+            return View(new Booking());    
         }
 
-        [Authorize]
         [HttpPost]
         public async Task<IActionResult> InsertBooking(Booking model)
         {
@@ -500,7 +562,14 @@ namespace Hotel.Controllers
                 try
                 {
                     context.InsertBooking(model);
-                    return RedirectToAction("Booking");
+                    if(User.IsInRole("User") || User.IsInRole("Admin"))
+                    {
+                        return RedirectToAction("Booking");
+                    }
+                    else
+                    {
+                        return RedirectToAction("Index");
+                    }
                 }
                 catch
                 {

@@ -1,0 +1,26 @@
+﻿@model Hotel.Models.CheckClient
+@{
+    ViewData["Title"] = "";
+    Layout = "~/Views/Shared/_AccountLayout.cshtml";
+}
+<div class="account-container">
+    <div class="account-box">
+        <form asp-action="CheckClient" asp-controller="Home" method="Post">
+        <div class="mb-3">
+            <label asp-for="Id_r" class="form-label">Номер</label>
+            <input type="text" maxlength="100" asp-for="Id_r" class="form-control" readonly/>
+        </div>
+        <div class="mb-3">
+            <label asp-for="Fio" class="form-label">ФИО</label>
+            <input type="text" maxlength="100" asp-for="Fio" class="form-control" />
+            <span asp-validation-for="Fio" class="text-danger"></span>
+        </div>
+        <div class="mb-3">
+            <label asp-for="Phone" class="form-label">Телефон</label>
+            <input type="text" maxlength="16" placeholder="+7(000)000-00-00" asp-for="Phone" class="form-control" />
+            <span asp-validation-for="Phone" class="text-danger"></span>
+        </div>
+            <input type="submit" value="Далее" class="btn btn-success w-100 p-2" />
+        </form>
+    </div>
+</div>

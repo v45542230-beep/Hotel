@@ -1,7 +1,26 @@
-﻿@{
+﻿@model IEnumerable<Hotel.Models.Rooms>
+@{
     ViewData["Title"] = "Главная";
 }
 
 <div class="text-center">
     <h1 class="display-4">Добро пожаловать!</h1>
+</div>
+<form asp-controller="Home" asp-action="CheckBooking" method="get">
+    <input type="submit" value="Посмотреть брони" class="btn btn-success w-100 p-1" />
+</form>
+<div id="list-container">
+    @foreach (var item in Model)
+    {
+        <div id="room-container">
+            <label asp-for="@item.Id">Номер: @item.Id</label>
+            <label asp-for="@item.Type">Тип: @item.Type</label>
+            <label asp-for="@item.Count">Количество гостей: @item.Count</label>
+            <label asp-for="@item.Price">Цена: @item.Price</label>
+            <label asp-for="@item.Floor">Этаж: @item.Floor</label>
+            <form asp-controller="Home" asp-action="CheckClient" method="get" asp-route-id="@item.Id">
+                <input id="button-@item.Id" type="submit" value="Забронировать" class="btn btn-success w-30 p-1" />
+            </form>
+        </div>
+    }
 </div>

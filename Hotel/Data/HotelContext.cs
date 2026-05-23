@@ -269,6 +269,35 @@ namespace Hotel.Data
             }
             return list;
         }
+        public Clients GetOneClientByFioAndPhone(string fio, string phone)
+        {
+            Clients list = new Clients { };
+            using (MySqlConnection conn = GetConnection())
+            {
+                conn.Open();
+                MySqlCommand cmd = new MySqlCommand($"SELECT * FROM clients where fio='{fio}' and phone='{phone}'", conn);
+                using (MySqlDataReader reader = cmd.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        list = new Clients
+                        {
+                            Id = reader.GetInt32("id"),
+                            Fio = reader.GetString("fio"),
+                            Birth = reader.GetDateTime("birth"),
+                            Series = reader.GetString("series"),
+                            Number = reader.GetString("number"),
+                            Date_of_issue = reader.GetDateTime("date_of_issue"),
+                            Issued_by_whom = reader.GetString("issued_by_whom"),
+                            Card = reader.GetString("card"),
+                            Phone = reader.GetString("phone"),
+                            Email = reader.GetString("email"),
+                        };
+                    }
+                }
+            }
+            return list;
+        }
         public Rooms GetOneRoom(int id)
         {
             Rooms list = new Rooms { };

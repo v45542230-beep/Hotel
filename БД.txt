@@ -1,0 +1,242 @@
+create database hotel default charset cp1251;
+use hotel;
+create table clients(
+id int primary key auto_increment,
+fio varchar(100) not null,
+birth date not null,
+series varchar(4) not null,
+number varchar(6) not null unique,
+date_of_issue date not null,
+issued_by_whom varchar(50) not null,
+card varchar(19) not null unique,
+phone varchar(16) not null unique,
+email varchar(50)
+);
+create table rooms(
+id int primary key auto_increment,
+type varchar(7) not null,
+count int not null,
+status varchar(8) not null,
+price int not null,
+floor int not null
+);
+create table post(
+id int primary key auto_increment,
+name varchar(20) not null unique,
+pay int not null
+);
+create table staff(
+id int primary key auto_increment,
+fio varchar(100) not null,
+birth date not null,
+series varchar(4) not null,
+number varchar(6) not null unique,
+date_of_issue date not null,
+issued_by_whom varchar(50) not null,
+phone varchar(16) not null unique,
+email varchar(50) not null unique,
+id_p int not null,
+date_of_employment date not null,
+foreign key (id_p) references post(id) on delete cascade on update cascade
+);
+create table service(
+id int primary key auto_increment,
+name varchar(20) not null,
+id_st int not null,
+id_c int not null,
+date_of_registration date not null,
+foreign key (id_st) references staff(id) on delete cascade on update cascade,
+foreign key (id_c) references clients(id) on delete cascade on update cascade
+);
+create table booking(
+id int primary key auto_increment,
+id_c int not null,
+id_r int not null,
+begin_date date not null,
+end_date date not null,
+count_c int not null,
+final_price int not null,
+foreign key (id_c) references clients(id) on delete cascade on update cascade,
+foreign key (id_r) references rooms(id) on delete cascade on update cascade
+);
+
+insert into clients(fio, birth, series, number, date_of_issue, issued_by_whom, card, phone, email) values('Иванов Иван Иванович', '2000-01-01', '6618', '961467', '2018-01-01', 'ГУ МВД России по Пермскому краю', '4960-1492-0962-1130', '+7(918)633-79-36', 'test1@test.ru');
+insert into clients(fio, birth, series, number, date_of_issue, issued_by_whom, card, phone, email) values('Борисов Тимофей Евгеньевич', '2000-02-02', '2701', '518901', '2018-02-02', 'ГУ МВД России по Пермскому краю', '4960-1484-9298-8701', '+7(906)012-98-38', 'test2@test.ru');
+insert into clients(fio, birth, series, number, date_of_issue, issued_by_whom, card, phone, email) values('Семёнов Матвей Геннадьевич', '2000-03-03', '6520', '420356', '2018-03-03', 'ГУ МВД России по Пермскому краю', '4960-1417-7032-9433', '+7(907)160-61-93', 'test3@test.ru');
+insert into rooms(type, count, status, price, floor) values('Обычный', 1, 'Свободен', 1000, 1);
+insert into rooms(type, count, status, price, floor) values('VIP', 2, 'Свободен', 2000, 1);
+insert into rooms(type, count, status, price, floor) values('Обычный', 1, 'Свободен', 1000, 1);
+insert into post(name, pay) values('Администратор', 100000);
+insert into post(name, pay) values('Консьерж', 40000);
+insert into post(name, pay) values('Посыльный', 30000);
+insert into staff(fio, birth, series, number, date_of_issue, issued_by_whom, phone, email, id_p, date_of_employment) values('Киселёва Вероника Павловна', '1980-04-04', '9008', '198808', '2025-04-04', 'ГУ МВД России по Пермскому краю', '+7(901)788-78-47', 'test4@test.ru', 1, '2020-06-14');
+insert into staff(fio, birth, series, number, date_of_issue, issued_by_whom, phone, email, id_p, date_of_employment) values('Кузьмина Милана Артёмовна', '1993-05-05', '0914', '230345', '2011-05-05', 'ГУ МВД России по Пермскому краю', '+7(934)198-50-40', 'test5@test.ru', 2, '2021-04-21');
+insert into staff(fio, birth, series, number, date_of_issue, issued_by_whom, phone, email, id_p, date_of_employment) values('Кузьмин Матвей Анатольевич', '1993-06-06', '9705', '105319', '2011-06-06', 'ГУ МВД России по Пермскому краю', '+7(968)521-03-60', 'test6@test.ru', 1, '2021-04-21');
+insert into service(name, id_st, id_c, date_of_registration) values('Доставка еды', 3, 1, '2026-05-01');
+insert into service(name, id_st, id_c, date_of_registration) values('Спортзал', 1, 2, '2026-05-01');
+insert into service(name, id_st, id_c, date_of_registration) values('Парковка', 3, 3, '2026-05-01');
+insert into booking(id_c, id_r, begin_date, end_date, count_c, final_price) values(1, 1, '2026-05-01', '2026-05-07', 1, 2000);
+insert into booking(id_c, id_r, begin_date, end_date, count_c, final_price) values(2, 2, '2026-05-01', '2026-05-07', 1, 4000);
+insert into booking(id_c, id_r, begin_date, end_date, count_c, final_price) values(3, 3, '2026-05-01', '2026-05-07', 1, 4000);
+
+-- Триггеры
+
+CREATE DEFINER=`root`@`localhost` TRIGGER `clients_BEFORE_INSERT` BEFORE INSERT ON `clients` FOR EACH ROW BEGIN
+if new.email is null or new.email = '' then 
+set new.email = '-'; 
+end if;
+if new.birth>curdate() - interval 18 year then
+signal sqlstate '10000'
+set message_text='Нельзя зарегистрировать клиента младше 18 лет!';
+end if;
+if new.date_of_issue>curdate() then
+signal sqlstate '10000'
+set message_text='Дата выдачи не может быть позднее текущей!';
+end if;
+END
+
+CREATE DEFINER=`root`@`localhost` TRIGGER `clients_BEFORE_UPDATE` BEFORE UPDATE ON `clients` FOR EACH ROW BEGIN
+if new.email is null or new.email = '' then 
+set new.email = '-'; 
+end if;
+if new.birth>curdate() - interval 18 year then
+signal sqlstate '10000'
+set message_text='Клиент не может быть младше 18 лет!';
+end if;
+if new.date_of_issue>curdate() then
+signal sqlstate '10000'
+set message_text='Дата выдачи не может быть позднее текущей!';
+end if;
+END
+
+CREATE DEFINER=`root`@`localhost` TRIGGER `price_INSERT` BEFORE INSERT ON `rooms` FOR EACH ROW BEGIN
+if new.type = 'Обычный' then
+set new.price = 1000;
+else
+set new.price = 2000;
+end if;
+set new.status='Свободен';
+END
+
+CREATE DEFINER=`root`@`localhost` TRIGGER `price_UPDATE` BEFORE UPDATE ON `rooms` FOR EACH ROW BEGIN
+if new.type = 'Обычный' then
+set new.price = 1000;
+else
+set new.price = 2000;
+end if;
+END
+
+CREATE DEFINER=`root`@`localhost` TRIGGER `final_price_in_service_INSERT` BEFORE INSERT ON `service` FOR EACH ROW BEGIN
+declare price int;
+declare b_date date;
+declare e_date date;
+set b_date = (select begin_date from booking where (id_c=new.id_c) and (new.date_of_registration between begin_date and end_date));
+set e_date = (select end_date from booking where (id_c=new.id_c) and (new.date_of_registration between begin_date and end_date));
+if new.name = 'Доставка еды' and (new.date_of_registration between b_date and e_date) then
+set price=1000;
+elseif new.name = 'Спортзал' and (new.date_of_registration between b_date and e_date) then
+set price=2000;
+elseif new.name = 'Парковка' and (new.date_of_registration between b_date and e_date) then
+set price=3000;
+end if;
+update booking set final_price=final_price+price where (id_c=new.id_c) and (new.date_of_registration between begin_date and end_date);
+END
+
+CREATE DEFINER=`root`@`localhost` TRIGGER `final_price_in_service_UPDATE` BEFORE UPDATE ON `service` FOR EACH ROW BEGIN
+declare price int;
+declare b_date date;
+declare e_date date;
+set b_date = (select begin_date from booking where (id_c=new.id_c) and (new.date_of_registration between begin_date and end_date));
+set e_date = (select end_date from booking where (id_c=new.id_c) and (new.date_of_registration between begin_date and end_date));
+if old.name = 'Доставка еды' and new.name = 'Спортзал' and (old.date_of_registration between b_date and e_date) then
+set price=1000;
+elseif old.name = 'Доставка еды' and new.name = 'Парковка' and (old.date_of_registration between b_date and e_date) then
+set price=2000;
+elseif old.name = 'Спортзал' and new.name = 'Доставка еды' and (old.date_of_registration between b_date and e_date) then
+set price=-1000;
+elseif old.name = 'Спортзал' and new.name = 'Парковка' and (old.date_of_registration between b_date and e_date) then
+set price=1000;
+elseif old.name = 'Парковка' and new.name = 'Доставка еды' and (old.date_of_registration between b_date and e_date) then
+set price=-2000;
+elseif old.name = 'Парковка' and new.name = 'Спортзал' and (old.date_of_registration between b_date and e_date) then
+set price=-1000;
+end if;
+update booking set final_price=final_price+price where (id_c=old.id_c) and (old.date_of_registration between begin_date and end_date);
+END
+
+CREATE DEFINER=`root`@`localhost` TRIGGER `final_price_in_service_DELETE` AFTER DELETE ON `service` FOR EACH ROW BEGIN
+declare price int;
+declare b_date date;
+declare e_date date;
+set b_date = (select begin_date from booking where (id_c=old.id_c) and (old.date_of_registration between begin_date and end_date));
+set e_date = (select end_date from booking where (id_c=old.id_c) and (old.date_of_registration between begin_date and end_date));
+if old.name = 'Доставка еды' and (old.date_of_registration between b_date and e_date) then
+set price=1000;
+elseif old.name = 'Спортзал' and (old.date_of_registration between b_date and e_date) then
+set price=2000;
+elseif old.name = 'Парковка' and (old.date_of_registration between b_date and e_date) then
+set price=3000;
+end if;
+update booking set final_price=final_price-price where (id_c=old.id_c) and (old.date_of_registration between begin_date and end_date);
+END
+
+CREATE DEFINER=`root`@`localhost` TRIGGER `booking_BEFORE_INSERT` BEFORE INSERT ON `booking` FOR EACH ROW BEGIN
+declare new_price int;
+declare count_booking int;
+set new_price = (select price from rooms where id=new.id_r);
+set new.final_price = new_price;
+if new.begin_date>new.end_date then
+signal sqlstate '10000'
+set message_text='Дата въезда не может быть позднее даты выезда!';
+end if;
+select count(*) into count_booking from booking where (id_r=new.id_r) and (new.begin_date between begin_date and end_date) or (id_r=new.id_r) and (new.end_date between begin_date and end_date) or (id_r=new.id_r) and (begin_date between new.begin_date and new.end_date) or (id_r=new.id_r) and (end_date between new.begin_date and new.end_date);
+if count_booking>0 then
+signal sqlstate '10000'
+set message_text='На этот номер уже есть бронь в указанный период!';
+end if;
+END
+
+CREATE DEFINER=`root`@`localhost` TRIGGER `booking_BEFORE_UPDATE` BEFORE UPDATE ON `booking` FOR EACH ROW BEGIN
+declare new_price int;
+if old.id_r <> new.id_r then
+set new_price = (select price from rooms where id = new.id_r);
+set new.final_price = new_price;
+if new.begin_date>new.end_date then
+signal sqlstate '10000'
+set message_text='Дата въезда не может быть позднее даты выезда!';
+end if;
+end if;
+END
+
+CREATE DEFINER=`root`@`localhost` TRIGGER `staff_BEFORE_INSERT` BEFORE INSERT ON `staff` FOR EACH ROW BEGIN
+if new.birth>curdate() - interval 18 year then
+signal sqlstate '10000'
+set message_text='Нельзя зарегистрировать сотрудника младше 18 лет!';
+end if;
+if new.date_of_issue>curdate() then
+signal sqlstate '10000'
+set message_text='Дата выдачи не может быть позднее текущей!';
+end if;
+END
+
+CREATE DEFINER=`root`@`localhost` TRIGGER `staff_BEFORE_UPDATE` BEFORE UPDATE ON `staff` FOR EACH ROW BEGIN
+if new.birth>curdate() - interval 18 year then
+signal sqlstate '10000'
+set message_text='Сотрудник не может быть младше 18 лет!';
+end if;
+if new.date_of_issue>curdate() then
+signal sqlstate '10000'
+set message_text='Дата выдачи не может быть позднее текущей!';
+end if;
+END
+
+-- Представления
+
+create view Годовой_доход as
+select sum(final_price), year(begin_date) from booking group by year(begin_date);
+
+create view Текущие_постояльцы as
+select fio, id_r, begin_date, end_date from clients, booking where clients.id=booking.id_c;
+
+create view Персонал as
+select fio, name, date_of_employment, pay from staff, post where post.id=staff.id_p;
